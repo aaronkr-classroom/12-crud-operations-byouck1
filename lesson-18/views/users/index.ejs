@@ -21,9 +21,17 @@
           </tr>
         </thead>
         <tbody>
-          <!-- 
-            @TODO: 뷰에서 사용자 배열 루핑 탐색 
-          -->
+          <% users.forEach(function(user) { %>
+            <tr>
+              <td><% user.username %></td>
+              <td><% user.fullName %></td>
+              <td><% user.email %></td>
+              <td>
+                <a href="/users/<%= users.id %>/edit">Edit</a>
+                <a href="/users/<%= users.id %>/delete">Delete/a>
+              </td>
+              </tr>
+            <% }); %>
         </tbody>
       </table>
 

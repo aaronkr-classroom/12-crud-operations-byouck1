@@ -8,15 +8,18 @@ const mongoose = require("mongoose"),
   Course = require("../models/Course");
 
 // 데이터베이스 연결 설정
-mongoose.connect("mongodb://127.0.0.1:27017/ut-nodejs", {
-  useNewUrlParser: true,
-});
+mongoose.connect(
+  "mongodb+srv://ut-node:1234@ut-node.ny8ugbl.mongodb.net/?retryWrites=true&w=majority&appName=UT-NODE", //Atlas 경로
+);
 
-mongoose.connection;
+const db=mongoose.connection;
+db.once("open",()=> {
+  console.log("Connected to DB!!!");
+});
 
 var courses = [
   {
-    _id: "nodejs101",
+    _id: "node101",
     title: "Node.js 101",
     description: "웹 개발로 알아보는 백엔드 자바스크립트의 이해",
     price: 20000,
@@ -98,4 +101,4 @@ setTimeout(() => {
     .catch((error) => {
       console.log(`Error: ${error}`);
     });
-}, 500);
+}, 1500);
