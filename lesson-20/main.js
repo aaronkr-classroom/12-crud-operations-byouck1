@@ -2,6 +2,7 @@
 "use strict";
 
 const express = require("express"), // express를 요청
+  mongoose = require('mongoose'),
   layouts = require("express-ejs-layouts"), // express-ejs-layout의 요청
   homeController = require("./controllers/homeController"),
   subscribersController = require("./controllers/subscribersController"),
@@ -13,10 +14,13 @@ const express = require("express"), // express를 요청
  * Listing 16.1 (p. 228)
  * 애플리케이션에 Mongoose 설정
  */
-const mongoose = require("mongoose"); // mongoose를 요청
-// 데이터베이스 연결 설정
-mongoose.connect("mongodb://127.0.0.1:27017/ut-nodejs", {
-  useNewUrlParser: true,
+mongoose.connect(
+  "mongodb+srv://ut-node:1234@ut-node.ny8ugbl.mongodb.net/?retryWrites=true&w=majority&appName=UT-NODE", //Atlas 경로
+);
+
+const db=mongoose.connection;
+db.once("open",()=> {
+  console.log("Connected to DB!!!");
 });
 
 app.set("port", process.env.PORT || 3000);
@@ -57,6 +61,12 @@ app.use("/", router);
 /**
  * @TODO: methodOverride를 미들웨어로 사용하기 위한 애플리케이션 라유터 설정
  */
+const methodOverride=require("method-override");
+router.use(
+  methodOverride("_method", {
+    methods: ["POST","GET"]
+  })
+);
 
 /**
  * Listing 12.6 (p. 178)
@@ -89,12 +99,19 @@ router.get("/users/:id", usersController.show, usersController.showView);
 
 /**
  * Listing 20.7 (p. 296)
- * edit및 update 라우트 추가
+ * edit및 update,delete 라우트 추가
  */
-/**
- * @TODO: viewing을 처리하기 위한 라우트 추가
- */
-
+router.get("/users/id:/edit",usersController.edit);
+router.put(
+  "/users/:id/update",
+  usersController.update,
+  usersController.redirectView
+);
+router.delete(
+  "/users/:id/delete",
+  usersController.delete,
+  usersController.redirectView
+);
 /**
  * Listing 12.12 (p. 184)
  * 에러 처리 라우트
